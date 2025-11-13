@@ -1,40 +1,49 @@
-const dummyData = {
-    "New York": { temp: 22, desc: "Sunny", humidity: 45 },
-    London: { temp: 15, desc: "Cloudy", humidity: 72 },
-    Mumbai: { temp: 20, desc: "Rainy", humidity: 83 },
-    Paris: { temp: 19, desc: "Breezy", humidity: 60 },
-    Assam: { temp: 28, desc: "Partly Cloudy", humidity: 40 },
-    Delhi: { temp: 30, desc: "Sunny", humidity: 55 }
-  };
+(function () {
+    const OPENWEATHER_API_KEY = '4a14fbe13dd4f7577eecfac21179d176'; 
+    const input = document.getElementById('city-input');
+    const btn = document.getElementById('search-button');
+    const locEl = document.getElementById('location');
+    const tempEl = document.getElementById('temperature');
+    const descEl = document.getElementById('description');
+    const humEl = document.getElementById('humidity');
+    const windEl = document.getElementById('wind');
   
-  function getWeather() {
-    const input = document.getElementById("cityInput").value.trim();
-    const weatherInfo = document.getElementById("weatherInfo");
+    async function search() {
+      const q = input.value.trim();
+      if (!q) { input.focus(); return; }
+      try {
+        btn.disabled = true; btn.textContent = 'Loading…';
+        if (!OPENWEATHER_API_KEY || OPENWEATHER_API_KEY === 'YOUR_API_KEY_HERE') {
+          throw new Error('Add your OpenWeatherMap API key in script.js');
+        }
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(q)}&units=metric&appid=${OPENWEATHER_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!res.ok) {
+          const msg = (data && data.message) ? data.message : 'Failed to fetch weather';
+          throw new Error(msg.charAt(0).toUpperCase() + msg.slice(1));
+        }
   
-    if (input === "") {
-      weatherInfo.innerHTML = "<p>Please enter a city name ⛅</p>";
-      console.log("No city entered");
-      return;
+        const city = `${data.name}${data.sys?.country ? ', ' + data.sys.country : ''}`;
+        const temp = Math.round(data.main?.temp);
+        const desc = (data.weather && data.weather[0] && data.weather[0].description)
+          ? data.weather[0].description.replace(/\b\w/g, c => c.toUpperCase())
+          : '—';
+        const humidity = data.main?.humidity;
+        const windKmh = typeof data.wind?.speed === 'number' ? Math.round(data.wind.speed * 3.6) : null; // m/s -> km/h
+  
+        locEl.textContent = `Location: ${city || '—'}`;
+        tempEl.textContent = `Temperature: ${Number.isFinite(temp) ? temp + '°C' : '—'}`;
+        descEl.textContent = `Description: ${desc}`;
+        humEl.textContent = `Humidity: ${Number.isFinite(humidity) ? humidity + '%' : '—'}`;
+        windEl.textContent = `Wind: ${Number.isFinite(windKmh) ? windKmh + ' km/h' : '—'}`;
+      } catch (e) {
+        descEl.textContent = `Description: ${(e && e.message) || 'Error'}`;
+      } finally {
+        btn.disabled = false; btn.textContent = 'Search';
+      }
     }
   
-    const city = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-  
-    console.log("City entered:", city);
-  
-    if (dummyData[city]) {
-      const data = dummyData[city];
-  
-      console.log("Weather Data:", data);
-  
-      weatherInfo.innerHTML = `
-        <div class="temp">${data.temp}°C</div>
-        <div class="city">${city}</div>
-        <div class="desc">${data.desc}</div>
-        <div class="humidity">💧 Humidity: ${data.humidity}%</div>
-      `;
-    } else {
-      console.log(`No weather data found for: ${city}`);
-      weatherInfo.innerHTML = `<p>⚠️ No weather data found for "${city}".</p>`;
-    }
-  }
-  
+    btn.addEventListener('click', search);
+    input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') search(); });
+  })();

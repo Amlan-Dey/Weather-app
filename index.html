@@ -1,117 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather App (Dark Theme)</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Poppins", sans-serif;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Weather App (Dark Theme)</title>
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; font-family: "Poppins", sans-serif; }
+    body { background:#1e1e2f; color:#fff; display:flex; align-items:center; justify-content:center; height:100vh; }
+    .container { background:#2a2a40; border-radius:15px; width:380px; padding:24px; box-shadow:0 6px 30px rgba(0,0,0,0.5); }
+    h1 { color:#00b4d8; font-size:1.6rem; margin-bottom:14px; text-align:center; }
+    .search-row { display:flex; gap:10px; margin-bottom:16px; }
+    input#city-input {
+      flex:1; padding:10px 12px; border-radius:8px; border:none; outline:none; font-size:1rem;
+      background:#232332; color:#fff;
+    }
+    button#search-button {
+      padding:10px 14px; border-radius:8px; border:none; cursor:pointer; background:#00b4d8; color:#022;
+      font-weight:600;
+    }
+    .card { background:#3a3a55; border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:8px; }
+    .stat { font-size:0.95rem; color:#e9eef2; }
+    .big { font-size:1.9rem; color:#ffd166; font-weight:700; }
+    .muted { color:#adb5bd; font-size:0.9rem; }
+    .note { text-align:center; margin-top:10px; color:#bcd; font-size:0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">🌤️ Weather Finder</h1>
 
-      body {
-        background-color: #1e1e2f;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-
-      .container {
-        background: #2a2a40;
-        border-radius: 15px;
-        width: 350px;
-        padding: 25px 20px;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-        text-align: center;
-      }
-
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-        color: #00b4d8;
-      }
-
-      .search-box {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-
-      input {
-        width: 70%;
-        padding: 10px;
-        border: none;
-        border-radius: 8px;
-        outline: none;
-        font-size: 1em;
-      }
-
-      button {
-        width: 25%;
-        border: none;
-        background-color: #00b4d8;
-        color: white;
-        border-radius: 8px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-
-      button:hover {
-        background-color: #0096c7;
-      }
-
-      .weather-card {
-        margin-top: 20px;
-        background: #3a3a55;
-        border-radius: 12px;
-        padding: 15px;
-        transition: 0.3s;
-      }
-
-      .temp {
-        font-size: 2.5em;
-        font-weight: 700;
-        color: #ffd166;
-      }
-
-      .city {
-        font-size: 1.3em;
-        margin-top: 5px;
-      }
-
-      .desc {
-        margin-top: 5px;
-        font-size: 1em;
-        color: #adb5bd;
-      }
-
-      .humidity {
-        margin-top: 10px;
-        font-size: 0.9em;
-        color: #90e0ef;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🌤️ Weather Finder</h1>
-
-      <div class="search-box">
-        <input type="text" id="cityInput" placeholder="Enter city..." />
-        <button onclick="getWeather()">Search</button>
-      </div>
-
-      <div class="weather-card" id="weatherInfo">
-        <p>Type a city to get weather info 🌍</p>
-      </div>
+    <div class="search-row" role="search">
+      <input id="city-input" type="text" placeholder="Enter city (e.g. New York)" aria-label="City name" />
+      <button id="search-button" type="button">Search</button>
     </div>
 
-    <script src="app.js"></script>
-  </body>
+    <div class="card" id="weather-card" aria-live="polite">
+      <div id="location" class="stat muted">Location: —</div>
+      <div id="temperature" class="big">Temperature: —</div>
+      <div id="description" class="stat">Description: —</div>
+      <div id="humidity" class="stat">Humidity: —</div>
+      <div id="wind" class="stat">Wind: —</div>
+    </div>
+
+    <p class="note">Tip: press Enter or click Search</p>
+  </div>
+
+  <!-- Link your JS file that contains the IIFE (app.js) -->
+  <script src="app.js"></script>
+</body>
 </html>
