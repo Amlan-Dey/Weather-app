@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App (Dark Theme)</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: #1e1e2f;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: #2a2a40;
+        border-radius: 15px;
+        width: 350px;
+        padding: 25px 20px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #00b4d8;
+      }
+
+      .search-box {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 70%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        outline: none;
+        font-size: 1em;
+      }
+
+      button {
+        width: 25%;
+        border: none;
+        background-color: #00b4d8;
+        color: white;
+        border-radius: 8px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #0096c7;
+      }
+
+      .weather-card {
+        margin-top: 20px;
+        background: #3a3a55;
+        border-radius: 12px;
+        padding: 15px;
+        transition: 0.3s;
+      }
+
+      .temp {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: #ffd166;
+      }
+
+      .city {
+        font-size: 1.3em;
+        margin-top: 5px;
+      }
+
+      .desc {
+        margin-top: 5px;
+        font-size: 1em;
+        color: #adb5bd;
+      }
+
+      .humidity {
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: #90e0ef;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌤️ Weather Finder</h1>
+
+      <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Enter city..." />
+        <button onclick="getWeather()">Search</button>
+      </div>
+
+      <div class="weather-card" id="weatherInfo">
+        <p>Type a city to get weather info 🌍</p>
+      </div>
+    </div>
+
+    <script>
+      const dummyData = {
+        "New York": { temp: 22, desc: "Sunny", humidity: 45 },
+        London: { temp: 15, desc: "Cloudy", humidity: 72 },
+        Mumbai: { temp: 26, desc: "Rainy", humidity: 83 },
+        Paris: { temp: 19, desc: "Breezy", humidity: 60 },
+        Assam: { temp: 28, desc: "Partly Cloudy", humidity: 40 },
+        Delhi: { temp: 30, desc: "Sunny", humidity: 55 },
+      };
+
+      function getWeather() {
+        const input = document.getElementById("cityInput").value.trim();
+        const weatherInfo = document.getElementById("weatherInfo");
+
+        if (input === "") {
+          weatherInfo.innerHTML = "<p>Please enter a city name ⛅</p>";
+          return;
+        }
+
+        const city =
+          input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+
+        if (dummyData[city]) {
+          const data = dummyData[city];
+          weatherInfo.innerHTML = `
+          <div class="temp">${data.temp}°C</div>
+          <div class="city">${city}</div>
+          <div class="desc">${data.desc}</div>
+          <div class="humidity">💧 Humidity: ${data.humidity}%</div>
+        `;
+        } else {
+          weatherInfo.innerHTML = `<p>⚠️ No weather data found for "${city}".</p>`;
+        }
+      }
+    </script>
+  </body>
+</html>
